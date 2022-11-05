@@ -47,10 +47,10 @@ Response body, like:
 You can download the dataset from this link on kaggle: 
 https://www.kaggle.com/datasets/aiaiaidavid/cardio-data-dv13032020?select=cardiovascular_diseases_dv3.csv
 
-or this from github:  
+Another option from github:  
 https://github.com/mary435/cardiovascular_diseases_risk_model/blob/28c9346a431fdfe8543174c9ea6af4dfd89074c9/cardiovascular_diseases_dv3.csv
 
-or you can download it from the notebook, leave the lines with wget.
+Third option download it from the notebook. I leave the lines with wget ready.
 
 ## Notebook
 The notebook was created with this anaconda environment: 
@@ -66,13 +66,17 @@ This script reads the dataset that should be saved in the same folder with the n
 Then prepares the data, trains the final model and saves it with BentoML.
 For running it you need the same environment from the notebook file. You can download it from this link: https://github.com/mary435/cardiovascular_diseases_risk_model/blob/55504aab2b4592bb6a24d067bde962bf54ff6f2b/cardio_project_env.yaml
 And import it to your anaconda, option environments, import.
-From anaconda's "open terminal" option, you can run the "train.py" script with the >>python train.py command to read the dataset,
+From anaconda's "open terminal" option, you can run the "train.py" script with the >>python train.py command this read the dataset,
 prepare the data, train the final model, and save it with BentoML.
 
-Or with pipenv you need to download this 2 files: 
+Alternatively with pipenv you need to download this 2 files: 
 https://github.com/mary435/cardiovascular_diseases_risk_model/blob/a0a5be75ac43a0224f8077a4e2554d18379834a1/Pipfile
 https://github.com/mary435/cardiovascular_diseases_risk_model/blob/a0a5be75ac43a0224f8077a4e2554d18379834a1/Pipfile.lock
 And next run >>pipenv install. When finished run >>pipenv run python train.py
 
+## Docker 
+If you have docker and bentoml installed, you can run >>bentoml build <tag>. 
+Where you complete the <tag> with the tag that results from the notebook or train.py. 
 
-
+  
+  
