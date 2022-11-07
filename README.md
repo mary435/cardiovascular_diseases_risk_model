@@ -88,19 +88,27 @@ Next, open the jupyter Notebook file and run it to view the EDA analyzes and tra
 In the xgboost model, for the parameter adjustment, you will find a line with the comment ####### that indicates 
 the different parameters that you need to change, to then execute this cell again and see the graph with the comparison with them.
 
-## Train.py
+## [train.py](train.py)
 This script reads the dataset that should be saved in the same folder with the name: 'cardiovascular_diseases_dv3.csv'. 
 Then prepares the data, trains the final model and saves it with BentoML.
 For running it you need the same environment from the notebook file. You can download it from this link: [cardio_project_env.yaml](cardio_project_env.yaml)  
 And import it to your anaconda, option environments, import.
-From anaconda's "open terminal" option, you can run the "train.py" script with the >>python train.py command this read the dataset,
+From anaconda's "open terminal" option, you can run the "train.py" script with the ```python train.py``` command this read the dataset,
 prepare the data, train the final model, and save it with BentoML.
 
-Alternatively with pipenv you need to download this 2 files: 
-[Pipfile](Pipfile)
-[Pipfile.lock](Pipfile.lock)
+Alternatively with pipenv you need to download this files at the same folder with the dataframe and script: 
+* [Pipfile](Pipfile)
+* [Pipfile.lock](Pipfile.lock)
+* [bentofile.yaml](bentofile.yaml)
+* [train.py](train.py)
 
-And next run >>pipenv install. When finished run >>pipenv run python train.py
+And next run ```pipenv install``` 
+When finished run ```pipenv run python train.py```
+As a result you will obtain a tag like 'cardiovascular_diseases_risk_model:ezg7eic6xcl5frft'
+Now run ```bentoml build cardiovascular_diseases_risk_model:latest ```
+Or can reemplace laest with the tag that you previus obtain. 
+
+
 
 ## Docker 
 If you have docker and bentoml installed, you can run >>bentoml build 'tag' 
