@@ -116,7 +116,7 @@ And follow the same instructions as above for running the model.
 
 
 ## From bentoml model to Docker image 
-Open your docker and run this command in the same folder that we used for the project:  ```bentoml build ``` 
+Open your docker and run this command in the same folder and environ that we used for the project:  ```bentoml build ``` 
 As a result will receibe a message like this:
 ```
 (cardio_project) Marilinas-MacBook-Air:cardio_project marilinaorihuela$ bentoml build
@@ -152,7 +152,17 @@ Now just opening a browser to <http://localhost:3000>
 And follow the same instructions as above for running the model.
 
 
+## Push to docker hub
+* First, you will need your own docker hub username and logged in your docker desktop app.
+* Second tag your image with your docker hub username. For that use this command and replace maryorihuela for yours username:
+```
+docker tag cardiovascular_risk_classifier:xslsx4c63wv5jrft maryorihuela/cardiovascular_risk_classifier:latest
+```
+* Third ```docker push maryorihuela/cardiovascular_risk_classifier:latest```
+* FInally start the service: ```docker run -it --rm -p 3000:3000 maryorihuela/cardiovascular_risk_classifier:latest serve --production```
 
+Now just opening a browser to <http://localhost:3000>
+And follow the same instructions as above for running the model.
 
 
   
