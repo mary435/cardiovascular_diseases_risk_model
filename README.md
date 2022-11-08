@@ -70,7 +70,7 @@ docker run -it --rm -p 3000:3000 clamytoe/covid_risk_classifier serve --producti
 
 ## Try the service:
 Just opening a browser to <http://localhost:3000>
-And follow the same instructions as above for AWS.
+And follow the same instructions as above for running the model.
 
 
 ## Data: 
@@ -80,7 +80,7 @@ And follow the same instructions as above for AWS.
 
 * Third option download it from the notebook. I leave the lines with wget ready.
 
-## Notebook
+## [Notebook](notebook.ipynb)
 The notebook was created with this anaconda environment: [cardio_project_env.yaml](cardio_project_env.yaml)
 You can download it and import it to your anaconda, option environments, import.
 
@@ -95,6 +95,9 @@ For running it you need the same environment from the notebook file. You can dow
 And import it to your anaconda, option environments, import.
 From anaconda's "open terminal" option, you can run the "train.py" script with the ```python train.py``` command this read the dataset,
 prepare the data, train the final model, and save it with BentoML.
+Next to start the service locally, download this file [bentofile.yaml](bentofile.yaml) and run the comand ```bentoml serve service:svc --production```
+Just opening a browser to <http://localhost:3000>
+And follow the same instructions as above for running the model.
 
 Alternatively with pipenv you need to download this files at the same folder with the dataframe and script: 
 * [Pipfile](Pipfile)
@@ -104,17 +107,38 @@ Alternatively with pipenv you need to download this files at the same folder wit
 
 And next run ```pipenv install``` 
 When finished run ```pipenv run python train.py```
-As a result you will obtain a tag like 'cardiovascular_diseases_risk_model:ezg7eic6xcl5frft'
-Now run ```bentoml build cardiovascular_diseases_risk_model:latest ```
-Or can reemplace laest with the tag that you previus obtain. 
+Next use the comand ```bentoml serve service:svc --production```
+Just opening a browser to <http://localhost:3000>
+And follow the same instructions as above for running the model.
 
+## From bentoml model to Docker image 
+If you have docker and bentoml installed, you can run ```bentoml build ``` 
+command as a result will receibe a message like this:
+```
+(cardio_project) Marilinas-MacBook-Air:cardio_project marilinaorihuela$ bentoml build
+Building BentoML service "cardiovascular_risk_classifier:xslsx4c63wv5jrft" from build context "/Users/marilinaorihuela/Documents/cardio_project".
+Packing model "cardiovascular_diseases_risk_model:b6n5rxc63gzabrft"
+Locking PyPI package versions.
+/opt/anaconda3/envs/cardio_project/lib/python3.10/site-packages/_distutils_hack/__init__.py:33: UserWarning: Setuptools is replacing distutils.
+  warnings.warn("Setuptools is replacing distutils.")
 
+██████╗░███████╗███╗░░██╗████████╗░█████╗░███╗░░░███╗██╗░░░░░
+██╔══██╗██╔════╝████╗░██║╚══██╔══╝██╔══██╗████╗░████║██║░░░░░
+██████╦╝█████╗░░██╔██╗██║░░░██║░░░██║░░██║██╔████╔██║██║░░░░░
+██╔══██╗██╔══╝░░██║╚████║░░░██║░░░██║░░██║██║╚██╔╝██║██║░░░░░
+██████╦╝███████╗██║░╚███║░░░██║░░░╚█████╔╝██║░╚═╝░██║███████╗
+╚═════╝░╚══════╝╚═╝░░╚══╝░░░╚═╝░░░░╚════╝░╚═╝░░░░░╚═╝╚══════╝
 
-## Docker 
-If you have docker and bentoml installed, you can run >>bentoml build 'tag' 
-Where you replace the 'tag' with the real tag that results from the notebook or train.py. 
+Successfully built Bento(tag="cardiovascular_risk_classifier:xslsx4c63wv5jrft").
+```
+And we need that last tag for create the image.
+Next for create the docker image run the command ```bentoml containerize cardiovascular_risk_classifier:xslsx4c63wv5jrft ``` 
+but repleace the tag for yours.
 
-Likewise  
-
-  
+Finally yor will recibe a result like this:
+```
+Successfully built docker image for "cardiovascular_risk_classifier:xslsx4c63wv5jrft" with tags "cardiovascular_risk_classifier:xslsx4c63wv5jrft"
+To run your newly built Bento container, pass "cardiovascular_risk_classifier:xslsx4c63wv5jrft" to "docker run". For example: "docker run -it --rm -p 3000:3000 cardiovascular_risk_classifier:xslsx4c63wv5jrft serve --production".
+```
+Where indicates the command for run the service from the docker image like above. ```docker run -it --rm -p 3000:3000 cardiovascular_risk_classifier:xslsx4c63wv5jrft serve --production```  
   
