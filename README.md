@@ -65,7 +65,7 @@ docker pull maryorihuela/cardiovascular_diseases_risk
 
 ## Run localy:
 ```docker
-docker run -it --rm -p 3000:3000 clamytoe/covid_risk_classifier serve --production
+docker run -it --rm -p 3000:3000 maryorihuela/cardiovascular_diseases_risk serve --production
 ```
 
 ## Try the service:
@@ -82,20 +82,31 @@ And follow the same instructions as above for running the model.
 
 ## [Notebook](notebook.ipynb)
 The notebook was created with this anaconda environment: [cardio_project_env.yaml](cardio_project_env.yaml)
-You can download it and import it to your anaconda, option environments, import.
+
+Download it and import it to your anaconda, option environments, import.
 
 Next, open the jupyter Notebook file and run it to view the EDA analyzes and training of differents models.
+
 In the xgboost model, for the parameter adjustment, you will find a line with the comment ####### that indicates 
 the different parameters that you need to change, to then execute this cell again and see the graph with the comparison with them.
 
 ## [train.py](train.py)
 This script reads the dataset that should be saved in the same folder with the name: 'cardiovascular_diseases_dv3.csv'. 
 Then prepares the data, trains the final model and saves it with BentoML.
-For running it you need the same environment from the notebook file. You can download it from this link: [cardio_project_env.yaml](cardio_project_env.yaml)  
-And import it to your anaconda, option environments, import.
+
+Download this files  at the same folder with the dataframe
+* [bentofile.yaml](bentofile.yaml)
+* [train.py](train.py)
+
+For running it you need the same environment from the notebook file. 
+If you haven't downloaded it yet, here's the link: [cardio_project_env.yaml](cardio_project_env.yaml)  
+Next import it to your anaconda, option environments, import.
+
 From anaconda's "open terminal" option, you can run the "train.py" script with the ```python train.py``` command this read the dataset,
 prepare the data, train the final model, and save it with BentoML.
+
 Next to start the service locally, download this file [bentofile.yaml](bentofile.yaml) and run the comand ```bentoml serve service:svc --production```
+
 Just opening a browser to <http://localhost:3000>
 And follow the same instructions as above for running the model.
 
@@ -112,11 +123,11 @@ Just opening a browser to <http://localhost:3000>
 And follow the same instructions as above for running the model.
 
 ## From bentoml model to Docker image 
-If you have docker and bentoml installed, you can run ```bentoml build ``` 
-command as a result will receibe a message like this:
+Open your docker and run this command in the same folder that we used for the project:  ```bentoml build ``` 
+As a result will receibe a message like this:
 ```
 (cardio_project) Marilinas-MacBook-Air:cardio_project marilinaorihuela$ bentoml build
-Building BentoML service "cardiovascular_risk_classifier:xslsx4c63wv5jrft" from build context "/Users/marilinaorihuela/Documents/cardio_project".
+Building BentoML service "cardiovascular_risk_classifier:xslsx4c63wv5jrft" from build context "/Users//Documents/cardio_project".
 Packing model "cardiovascular_diseases_risk_model:b6n5rxc63gzabrft"
 Locking PyPI package versions.
 /opt/anaconda3/envs/cardio_project/lib/python3.10/site-packages/_distutils_hack/__init__.py:33: UserWarning: Setuptools is replacing distutils.
@@ -131,14 +142,21 @@ Locking PyPI package versions.
 
 Successfully built Bento(tag="cardiovascular_risk_classifier:xslsx4c63wv5jrft").
 ```
-And we need that last tag for create the image.
-Next for create the docker image run the command ```bentoml containerize cardiovascular_risk_classifier:xslsx4c63wv5jrft ``` 
-but repleace the tag for yours.
+
+Next for create the docker image run the command ```bentoml containerize cardiovascular_risk_classifier:latest ``` 
 
 Finally yor will recibe a result like this:
 ```
-Successfully built docker image for "cardiovascular_risk_classifier:xslsx4c63wv5jrft" with tags "cardiovascular_risk_classifier:xslsx4c63wv5jrft"
-To run your newly built Bento container, pass "cardiovascular_risk_classifier:xslsx4c63wv5jrft" to "docker run". For example: "docker run -it --rm -p 3000:3000 cardiovascular_risk_classifier:xslsx4c63wv5jrft serve --production".
+Successfully built docker image for "cardiovascular_risk_classifier:latest" with tags "cardiovascular_risk_classifier:xslsx4c63wv5jrft"
+To run your newly built Bento container, pass "cardiovascular_risk_classifier:xslsx4c63wv5jrft" to "docker run". 
+For example: "docker run -it --rm -p 3000:3000 cardiovascular_risk_classifier:xslsx4c63wv5jrft serve --production".
 ```
 Where indicates the command for run the service from the docker image like above. ```docker run -it --rm -p 3000:3000 cardiovascular_risk_classifier:xslsx4c63wv5jrft serve --production```  
+Now just opening a browser to <http://localhost:3000>
+And follow the same instructions as above for running the model.
+
+
+
+
+
   
