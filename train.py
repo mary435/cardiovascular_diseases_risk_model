@@ -6,12 +6,15 @@
 import pandas as pd
 import xgboost as xgb
 import bentoml
+import pickle
 
 from sklearn.model_selection import train_test_split
 from sklearn.feature_extraction import DictVectorizer
 from sklearn.metrics import roc_auc_score
 
-
+#%%
+file_name = f'model_xgb.bin'
+__author__ = "Marilina Orihuela"
 #%% Data Preparation
 
 print('Data Preparation')
@@ -63,9 +66,9 @@ xgb_params = {
 #%% training
 print('Doing validation')
 
-features = dv.get_feature_names_out()
-dtrain = xgb.DMatrix(X_train, label=y_train, feature_names=features)
-dval = xgb.DMatrix(X_val, label=y_val, feature_names=features)
+#features = dv.get_feature_names_out()
+dtrain = xgb.DMatrix(X_train, label=y_train)#, feature_names=features)
+dval = xgb.DMatrix(X_val, label=y_val) #, feature_names=features)
 model = xgb.train(xgb_params, dtrain, num_boost_round=115)
 
 #%% Train the final model
@@ -94,18 +97,33 @@ auc_final = roc_auc_score(y_test, y_pred)
 
 print('Final results:')
 print(f'AUC={auc_final}')
+#%% Save the model
+
+with open(file_name, 'wb') as f_out:
+    pickle.dump((dv, model), f_out)
+
+print(f'The model is saved to {file_name}')
+
+with open(file_name, 'rb') as f_in: 
+    dv, model = pickle.load(f_in)
+
+
 #%% save the model with BentoML
 
-f_out = bentoml.xgboost.save_model("cardiovascular_diseases_risk_model", model, 
-                              custom_objects={
-                                  "dictVectorizer": dv
-                              },
-                              signatures= {
-                                  "predict":{
-                                      "batchable": True,
-                                      "batch_dim": 0
-                                  }
-                              }
-                          )
+f_out = bentoml.xgboost.save_model("cardiovascular_diseases_risk_model", 
+                                    model, 
+                                    labels ={
+                                            "owner": __author__
+                                    },
+                                    custom_objects={
+                                                    "dictVectorizer": dv
+                                    },
+                                    signatures= {
+                                                "predict":{
+                                                        "batchable": True,
+                                                        "batch_dim": 0
+                                                } 
+                                    }
+                                )
 
-print(f'The model is saved to {f_out}')
+print(f'The Bento model is saved to {f_out}')

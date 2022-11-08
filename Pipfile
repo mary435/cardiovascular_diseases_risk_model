@@ -11,6 +11,8 @@ xgboost = "*"
 bentoml = "*"
 matplotlib = "*"
 seaborn = "*"
+pydantic = "*"
+sklearn = "*"
 
 [dev-packages]
 
