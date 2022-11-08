@@ -94,33 +94,26 @@ the different parameters that you need to change, to then execute this cell agai
 This script reads the dataset that should be saved in the same folder with the name: 'cardiovascular_diseases_dv3.csv'. 
 Then prepares the data, trains the final model and saves it with BentoML.
 
-Download this files  at the same folder with the dataframe
+Download this files at the same folder with the dataframe:
 * [bentofile.yaml](bentofile.yaml)
 * [train.py](train.py)
+* [service.py](service.py)
 
-For running it you need the same environment from the notebook file. 
-If you haven't downloaded it yet, here's the link: [cardio_project_env.yaml](cardio_project_env.yaml)  
-Next import it to your anaconda, option environments, import.
+* For anaconda environ: [cardio_project_env.yaml](cardio_project_env.yaml) If you haven't downloaded it yet
+* Alternatively with pipenv: [Pipfile](Pipfile) [Pipfile.lock](Pipfile.lock)
 
-From anaconda's "open terminal" option, you can run the "train.py" script with the ```python train.py``` command this read the dataset,
+Next: 
+ * From anaconda's "open terminal" option. 
+ * With pipenv: run ```pipenv install```  When finished run ```pipenv shell```
+
+Now you can run the "train.py" script with the ```python train.py``` command this read the dataset,
 prepare the data, train the final model, and save it with BentoML.
 
-Next to start the service locally, download this file [bentofile.yaml](bentofile.yaml) and run the comand ```bentoml serve service:svc --production```
+Next to start the service locally run the comand ```bentoml serve service:svc --production```
 
 Just opening a browser to <http://localhost:3000>
 And follow the same instructions as above for running the model.
 
-Alternatively with pipenv you need to download this files at the same folder with the dataframe and script: 
-* [Pipfile](Pipfile)
-* [Pipfile.lock](Pipfile.lock)
-* [bentofile.yaml](bentofile.yaml)
-* [train.py](train.py)
-
-And next run ```pipenv install``` 
-When finished run ```pipenv run python train.py```
-Next use the comand ```bentoml serve service:svc --production```
-Just opening a browser to <http://localhost:3000>
-And follow the same instructions as above for running the model.
 
 ## From bentoml model to Docker image 
 Open your docker and run this command in the same folder that we used for the project:  ```bentoml build ``` 
@@ -143,15 +136,18 @@ Locking PyPI package versions.
 Successfully built Bento(tag="cardiovascular_risk_classifier:xslsx4c63wv5jrft").
 ```
 
-Next for create the docker image run the command ```bentoml containerize cardiovascular_risk_classifier:latest ``` 
+Second for create the docker image run the command ```bentoml containerize cardiovascular_risk_classifier:latest ``` 
 
-Finally yor will recibe a result like this:
+Finally you will receive a result like this:
 ```
 Successfully built docker image for "cardiovascular_risk_classifier:latest" with tags "cardiovascular_risk_classifier:xslsx4c63wv5jrft"
 To run your newly built Bento container, pass "cardiovascular_risk_classifier:xslsx4c63wv5jrft" to "docker run". 
 For example: "docker run -it --rm -p 3000:3000 cardiovascular_risk_classifier:xslsx4c63wv5jrft serve --production".
 ```
+
+
 Where indicates the command for run the service from the docker image like above. ```docker run -it --rm -p 3000:3000 cardiovascular_risk_classifier:xslsx4c63wv5jrft serve --production```  
+
 Now just opening a browser to <http://localhost:3000>
 And follow the same instructions as above for running the model.
 
