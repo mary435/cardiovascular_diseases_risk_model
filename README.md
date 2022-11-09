@@ -153,16 +153,158 @@ And follow the same instructions as above for running the model.
 
 
 ## Push to docker hub
+
 * First, you will need your own docker hub username and logged in your docker desktop app.
-* Second tag your image with your docker hub username. For that use this command and replace maryorihuela for yours username:
-```
-docker tag cardiovascular_risk_classifier:xslsx4c63wv5jrft maryorihuela/cardiovascular_risk_classifier:latest
-```
+* Second tag your image with your docker hub username. For that use this command and replace maryorihuela for yours username:```docker tag cardiovascular_risk_classifier:xslsx4c63wv5jrft maryorihuela/cardiovascular_risk_classifier:latest```
 * Third ```docker push maryorihuela/cardiovascular_risk_classifier:latest```
 * FInally start the service: ```docker run -it --rm -p 3000:3000 maryorihuela/cardiovascular_risk_classifier:latest serve --production```
 
 Now just opening a browser to <http://localhost:3000>
 And follow the same instructions as above for running the model.
 
+## Push to AWS
+* First install AWS client with this command: ```pipenv install awsebcli --dev```
+* Second command ```aws configure```  And you can confire your account:
+```AWS Access Key ID [None]: 
+AWS Secret Access Key [None]: 
+Default region name [None]: 
+Default output format [None]: 
+```
+* Third command for create a repository (replace the region)
+```
+aws ecr create-repository \
+    --repository-name cardio-project \
+    --image-scanning-configuration scanOnPush=true \
+    --region sa-east-1
+```
+* Tag the image to push to your repository (replace aws_account_id and region): ```docker tag maryorihuela/cardiovascular_risk_classifier:latest aws_account_id.dkr.ecr.region.amazonaws.com/cardio-project:latest``` 
 
-  
+* Push the image ```docker push aws_account_id.dkr.ecr.region.amazonaws.com/cardio-project:latest```
+
+* Now create a new cluster with this command: ```aws ecs create-cluster --cluster-name fargate-cardio-cluster``` And will obtain this output
+```
+{
+    "cluster": {
+        "clusterArn": "arn:aws:ecs:region:aws_account_id:cluster/fargate-cardio-cluster",
+        "clusterName": "fargate-cardio-cluster",
+        "status": "ACTIVE",
+        "registeredContainerInstancesCount": 0,
+        "runningTasksCount": 0,
+        "pendingTasksCount": 0,
+        "activeServicesCount": 0,
+        "statistics": [],
+        "tags": [],
+        "settings": [
+            {
+                "name": "containerInsights",
+                "value": "disabled"
+            }
+        ],
+        "capacityProviders": [],
+        "defaultCapacityProviderStrategy": []
+    }
+}
+````
+* In the same way now register a task definition. This requires a file.json dowload this file: [fargate-task.json](fargate-task.json)
+* Hense now run  ```aws ecs register-task-definition --cli-input-json file://fargate-task.json```
+* Subsequently need to create a Service, please use your oun security group: ```aws ecs create-service --cluster fargate-cardio-cluster --service-name fargate-service --task-definition sample-fargate:1 --desired-count 1 --launch-type "FARGATE" --network-configuration "awsvpcConfiguration={subnets=[subnet-082a1e8f28c84476d],securityGroups=[sg-0058a660f98ab6e80],assignPublicIp=ENABLED}"```
+
+```"service": {
+        "serviceArn": "arn:aws:ecs:sa-east-1:894518756245:service/fargate-cardio-cluster/fargate-service",
+        "serviceName": "fargate-service",
+        "clusterArn": "arn:aws:ecs:sa-east-1:894518756245:cluster/fargate-cardio-cluster",
+        "loadBalancers": [],
+        "serviceRegistries": [],
+        "status": "ACTIVE",
+        "desiredCount": 1,
+        "runningCount": 0,
+        "pendingCount": 0,
+        "launchType": "FARGATE",
+        "platformVersion": "LATEST",
+        "platformFamily": "Linux",
+        "taskDefinition": "arn:aws:ecs:sa-east-1:894518756245:task-definition/sample-fargate:1",
+        "deploymentConfiguration": {
+            "deploymentCircuitBreaker": {
+                "enable": false,
+                "rollback": false
+            },
+            "maximumPercent": 200,
+            "minimumHealthyPercent": 100
+        },
+        "deployments": [
+            {
+                "id": "ecs-svc/8821440936399468319",
+                "status": "PRIMARY",
+                "taskDefinition": "arn:aws:ecs:sa-east-1:894518756245:task-definition/sample-fargate:1",
+                "desiredCount": 1,
+                "pendingCount": 0,
+                "runningCount": 0,
+                "failedTasks": 0,
+                "createdAt": "2022-11-08T21:39:06.210000-03:00",
+                "updatedAt": "2022-11-08T21:39:06.210000-03:00",
+                "launchType": "FARGATE",
+                "platformVersion": "1.4.0",
+                "platformFamily": "Linux",
+                "networkConfiguration": {
+                    "awsvpcConfiguration": {
+                        "subnets": [
+                            "subnet-082a1e8f28c84476d"
+                        ],
+                        "securityGroups": [
+                            "sg-0058a660f98ab6e80"
+```
+
+Obtain arn 
+aws ecs list-tasks --cluster fargate-cardio-cluster --service fargate-service
+output:
+```{
+    "taskArns": [
+        "arn:aws:ecs:sa-east-1:894518756245:task/fargate-cardio-cluster/e6886bbe19d2420fba5b3e10cb79dd7d"
+    ]
+}
+```
+The output contains the task ARN.
+now run 
+aws ecs describe-tasks --cluster fargate-cardio-cluster --tasks arn:aws:ecs:sa-east-1:894518756245:task/fargate-cardio-cluster/e6886bbe19d2420fba5b3e10cb79dd7d
+big output start wit
+```{
+    "tasks": [
+        {
+            "attachments": [
+                {
+                    "id": "18e4576c-ace9-47d7-9a70-34377cacfaa3",
+                    "type": "ElasticNetworkInterface",
+                    "status": "ATTACHED",
+                    "details": [
+                        {
+                            "name": "subnetId",
+                            "value": "subnet-082a1e8f28c84476d"
+                        },
+                        {
+                            "name": "networkInterfaceId",
+                            "value": "eni-00d09014780e74a74"
+                  ...continue
+```
+aws ec2 describe-network-interfaces --network-interface-id  eni-00d09014780e74a74
+Out...
+```
+{
+    "NetworkInterfaces": [
+        {
+            "Association": {
+                "IpOwnerId": "amazon",
+                "PublicDnsName": "ec2-18-228-150-152.sa-east-1.compute.amazonaws.com",
+                "PublicIp": "18.228.150.152"
+                ....continue
+```
+
+
+Clean Up
+aws ecs delete-service --cluster fargate-cardio-cluster --service fargate-service --force
+aws ecs delete-cluster --cluster fargate-cardio-cluster
+
+
+
+
+     
+
