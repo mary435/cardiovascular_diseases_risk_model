@@ -3,12 +3,12 @@
     "networkMode": "awsvpc", 
     "containerDefinitions": [
         {
-            "name": "fargate-app", 
+            "name": "fargate-cardio-app", 
             "image": "public.ecr.aws/docker/library/httpd:latest", 
             "portMappings": [
                 {
-                    "containerPort": 80, 
-                    "hostPort": 80, 
+                    "containerPort": 3000, 
+                    "hostPort": 3000, 
                     "protocol": "tcp"
                 }
             ], 
