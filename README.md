@@ -258,9 +258,12 @@ aws ecs delete-service --cluster fargate-cardio-cluster --service fargate-servic
 aws ecs delete-cluster --cluster fargate-cardio-cluster
 ```
 
+
+
+
 ```
 Marilina Orihuela
-mmary.orihuela@gmail.com
+mary.orihuela@gmail.com
 ```
 
 
