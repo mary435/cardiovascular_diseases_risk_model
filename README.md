@@ -7,9 +7,23 @@ is to use this information to warn of the risk of cardiovascular diseases.
 This model allows predicting the probability of suffering from cardiovascular disease,
 with an accuracy of 80%, trained from a database of more than 68,000 data, with the aim of alerting people to this risk.
 
-# Running the model:
+# Video of the model running on aws:
+<https://youtu.be/AuI64vn1aDI>
 
-The project is available on AWS and can be used from <http://18.228.152.61:3000/>
+## For running localy download the docker image from:
+
+```docker
+docker pull maryorihuela/cardiovascular_diseases_risk
+```
+
+## Run localy:
+```docker
+docker run -it --rm -p 3000:3000 maryorihuela/cardiovascular_diseases_risk serve --production
+```
+
+## Try the service:
+Just opening a browser to <http://localhost:3000>
+And follow the instructions:
 
 <img src="images/1.png">
  
@@ -55,22 +69,6 @@ Next click the Try it out button and complete the Request body:
 When you complete the data click on execute and you can see the probability below in the box
 Response body, like:
 <img src="images/5.png">
-
-
-## For running localy download the docker image from:
-
-```docker
-docker pull maryorihuela/cardiovascular_diseases_risk
-```
-
-## Run localy:
-```docker
-docker run -it --rm -p 3000:3000 maryorihuela/cardiovascular_diseases_risk serve --production
-```
-
-## Try the service:
-Just opening a browser to <http://localhost:3000>
-And follow the same instructions as above for running the model.
 
 
 ## Data: 
