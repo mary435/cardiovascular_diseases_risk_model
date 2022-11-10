@@ -8,7 +8,7 @@ This model allows predicting the probability of suffering from cardiovascular di
 with an accuracy of 80%, trained from a database of more than 68,000 data, with the aim of alerting people to this risk.
 
 # Video of the model running on aws:
-<https://youtu.be/AuI64vn1aDI>
+[![demo-video](images/demo-video.png)](https://youtu.be/AuI64vn1aDI)
 
 ## For running localy download the docker image from:
 
