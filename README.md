@@ -252,7 +252,7 @@ A big output now start wit:
 
 * Finally take this public IP and add ":3000" at the end like this: http://18.228.152.61:3000 for try your new service. 
 
-* For Clean up AWS run this 2 commands: 
+* For clean up AWS run this 2 commands: 
 ```
 aws ecs delete-service --cluster fargate-cardio-cluster --service fargate-service --force
 aws ecs delete-cluster --cluster fargate-cardio-cluster
