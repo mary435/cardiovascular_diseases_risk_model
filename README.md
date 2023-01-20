@@ -7,6 +7,8 @@ is to use this information to warn of the risk of cardiovascular diseases.
 This model allows predicting the probability of suffering from cardiovascular disease,
 with an accuracy of 80%, trained from a database of more than 68,000 data, with the aim of alerting people to this risk.
 
+## Try the model online: [Cardiovascular disease risk model](https://cardiovascular-prod-myspace-wvsnmq.mo1.mogenius.io/#/Service%20APIs/cardiovascular_risk_classifier__classify)
+
 ## Video of the model running on aws:
 [![demo-video](images/demo-video.png)](https://youtu.be/AuI64vn1aDI)
 
